@@ -16,6 +16,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Link href="/form">Форма</Link>
           <Link href="/table">Таблица</Link>
           <Link href="/modal">Модалка</Link>
+          <Link href="/ssr">SSR</Link>
+          <Link href="/ssg">SSG</Link>
         </nav>
         <main className="max-w-3xl mx-auto">{children}</main>
       </body>
