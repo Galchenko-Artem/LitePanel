@@ -1,6 +1,6 @@
 import "./globals.css";
-import Link from "next/link";
 import { ReactNode } from "react";
+import NavTabs from "@/components/NavTabs";
 
 export const metadata = {
   title: "React UI Playground",
@@ -10,16 +10,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru">
-      <body className="min-h-screen">
-        <nav className="bg-gray-800 text-white px-6 py-4 flex gap-4">
-          <Link href="/">Главная</Link>
-          <Link href="/form">Форма</Link>
-          <Link href="/table">Таблица</Link>
-          <Link href="/modal">Модалка</Link>
-          <Link href="/ssr">SSR</Link>
-          <Link href="/ssg">SSG</Link>
-        </nav>
-        <main className="max-w-3xl mx-auto">{children}</main>
+      <body className="min-h-screen bg-gray-100">
+        <div className="max-w-4xl mx-auto pt-6">
+          <NavTabs />
+          <div className="bg-white border border-t-0 border-gray-300 rounded-b-md p-8">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );
