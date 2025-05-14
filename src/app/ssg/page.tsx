@@ -1,14 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default async function SSGPage() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
+'use client';
+import { useQuery } from '@tanstack/react-query';
 
+export default function SSGQueryPage() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['posts'],
+    queryFn: async () => {
+      const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+      if (!res.ok) throw new Error('Ошибка загрузки');
+      return res.json();
+    },
+  });
+  if (isLoading) return <p className="text-gray-500">Загрузка...</p>;
+  if (isError) return <p className="text-red-500">Ошибка загрузки</p>;
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">SSG: Посты</h1>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">SSG через React Query</h1>
       <ul className="space-y-2">
-        {posts.slice(0, 5).map((post: any) => (
-          <li key={post.id} className="border-b pb-2">
+        {data.slice(0, 5).map((post: any) => (
+          <li key={post.id}>
             <a href={`/post/${post.id}`} className="text-blue-600 hover:underline">
               {post.title}
             </a>
