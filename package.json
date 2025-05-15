@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-     "server": "json-server --watch db.json --port 3001"
+    "server": "json-server --watch db.json --port 3001",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.76.1",
@@ -25,6 +28,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "cypress": "^14.3.3",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "json-server": "^1.0.0-beta.3",
