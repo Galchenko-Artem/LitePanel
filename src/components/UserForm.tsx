@@ -20,8 +20,9 @@ export default function UserForm({ onSubmit, children }: UserFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label className="block mb-1">Имя</label>
+        <label htmlFor="name" className="block mb-1">Имя</label>
         <input
+          id="name"
           name="name"
           type="text"
           value={name}
@@ -31,8 +32,9 @@ export default function UserForm({ onSubmit, children }: UserFormProps) {
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-1">Email</label>
+        <label  htmlFor="email" className="block mb-1">Email</label>
         <input
+          id="email"
           name="email"
           type="email"
           value={email}
