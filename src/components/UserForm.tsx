@@ -1,93 +1,51 @@
-"use client";
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  PropsWithChildren,
-} from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+"use client"
+
+import { useState } from "react"
 
 type UserFormProps = {
-  onSuccess?: () => void;
-};
+  onSubmit: (data: { name: string; email: string }) => void
+  children?: React.ReactNode
+}
 
-type FormData = {
-  name: string;
-  email: string;
-};
-
-const UserForm = ({ onSuccess, children }: PropsWithChildren<UserFormProps>) => {
-  const queryClient = useQueryClient(); 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const mutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Ошибка отправки");
-      return res.json();
-    },
-    onSuccess: () => {
-      setName("");
-      setEmail("");
-      queryClient.invalidateQueries({ queryKey: ["users"] }); // 👈 вот он!
-      onSuccess?.();
-    },
-  });
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      mutation.mutate({ name, email });
-    },
-    [name, email, mutation]
-  );
-
-  useEffect(() => {
-    nameRef.current?.focus();
-  }, []);
+export default function UserForm({ onSubmit, children }: UserFormProps) {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [submitted, setSubmitted] = useState(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSubmit({ name, email })
+    setSubmitted(true);
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded space-y-2 bg-white">
-      <div>
-        <label className="block text-sm">Имя:</label>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-4">
+        <label className="block mb-1">Имя</label>
         <input
-          ref={nameRef}
+          name="name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border p-1 w-full"
+          onChange={e => setName(e.target.value)}
+          className="border p-2 w-full"
+          required
         />
       </div>
-      <div>
-        <label className="block text-sm">Email:</label>
+      <div className="mb-4">
+        <label className="block mb-1">Email</label>
         <input
+          name="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-1 w-full"
+          onChange={e => setEmail(e.target.value)}
+          className="border p-2 w-full"
+          required
         />
       </div>
-      <button
-        type="submit"
-        disabled={mutation.isPending}
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
-        {mutation.isPending ? "Отправка..." : "Отправить"}
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+        Отправить
       </button>
-      {mutation.isSuccess && (
-        <p className="text-green-600 text-sm">Успешно отправлено!</p>
-      )}
-      {mutation.isError && (
-        <p className="text-red-600 text-sm">Ошибка: {(mutation.error as Error).message}</p>
-      )}
+      {submitted && <p>Форма успешно отправлена</p>} 
       {children}
     </form>
-  );
-};
-
-export default UserForm;
+  )
+}

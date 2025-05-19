@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import UserForm from "@/components/UserForm";
+import UserForm from "@/components/UserForm"
 
 export default function FormPage() {
   const handleSubmit = (data: { name: string; email: string }) => {
-    console.log("Отправлено:", data);
-  };
+    console.log("Отправлено:", data)
+  }
 
   return (
     <div className="p-6">
@@ -14,5 +14,5 @@ export default function FormPage() {
         <p className="text-sm text-gray-600">Заполните все поля.</p>
       </UserForm>
     </div>
-  );
+  )
 }
